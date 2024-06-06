@@ -25,7 +25,7 @@ DATA: gs_sflight TYPE sflight.
 *ENDSELECT.
 
 DATA: lt_sflight LIKE TABLE OF sflight WITH HEADER LINE.
-SELECT * INTO gs_sflight FROM sflight WHERE carrid = 'AA' AND connid = '0017'.
+SELECT *  into table lt_sflight FROM sflight WHERE carrid = 'AA' AND connid = '0017'.
 
   LOOP AT lt_sflight.
     WRITE: / sy-tabix, lt_sflight-planetype.
