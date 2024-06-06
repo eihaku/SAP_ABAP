@@ -1,0 +1,37 @@
+REPORT ZHAO_5_29_TEST.
+data num2 type i.
+
+types txt type c LENGTH 10.
+
+data var1 type txt.
+data bar3 like num2 VALUE 100.
+data var4 type c LENGTH 11.
+data var5 type p DECIMALS 2."浮动小数类型保存小数点后两位
+
+
+var5 = 321 /  100.
+WRITE var5.
+
+add 30 to var5."等于var = var + 30；
+WRITE var5.
+
+
+data: var6 type i VALUE 5,
+
+var7 type i VALUE 3."多个数据定义方法data：
+
+var6 =   var6 mod var7."等于var6 - var7.
+
+WRITE var6.
+
+var6 = var7 - var6.
+num2 = abs( var6 ).
+"取var6的绝对值给var2。
+*abs（）是返回绝对值函数
+*SIGN（）是返回符号函数
+*CEIL（）是返回小于该值de最小整数
+*FLOOR（）是与CEIL相反
+*TRUNC（）是取整数部分
+*FRAC（）是取小数部分
+
+WRITE num2.

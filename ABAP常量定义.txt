@@ -1,0 +1,89 @@
+在ABAP中，常量的定义和使用方式与变量类似，但常量的值在定义后不能被更改。常量通常用于表示程序中不会改变的固定值。使用常量可以提高代码的可读性和维护性。
+
+### 定义常量
+
+在ABAP中，使用 `CONSTANTS` 关键字来定义常量。常量的定义语法如下：
+
+```abap
+CONSTANTS: const_name TYPE data_type VALUE value.
+```
+
+- `const_name`：常量的名称。
+- `TYPE data_type`：常量的数据类型。
+- `VALUE value`：常量的初始值。
+
+### 示例
+
+以下是一些常量定义的示例：
+
+#### 整数常量
+
+```abap
+CONSTANTS: lc_max_attempts TYPE i VALUE 10.
+```
+
+定义了一个名为 `lc_max_attempts` 的整型常量，值为 10。
+
+#### 字符常量
+
+```abap
+CONSTANTS: lc_hello TYPE string VALUE 'Hello, World!'.
+```
+
+定义了一个名为 `lc_hello` 的字符串常量，值为 "Hello, World!"。
+
+#### 小数常量
+
+```abap
+CONSTANTS: lc_pi TYPE p DECIMALS 2 VALUE '3.14'.
+```
+
+定义了一个名为 `lc_pi` 的带有两位小数的小数常量，值为 3.14。
+
+#### 日期常量
+
+```abap
+CONSTANTS: lc_today TYPE d VALUE '20240603'.
+```
+
+定义了一个名为 `lc_today` 的日期常量，值为 2024年6月3日。
+
+### 使用常量
+
+常量在程序中可以像变量一样使用，但不能修改其值。以下是一个使用常量的示例：
+
+```abap
+REPORT zexample_constants.
+
+CONSTANTS: lc_max_attempts TYPE i VALUE 10,
+           lc_hello        TYPE string VALUE 'Hello, World!'.
+
+DATA: lv_attempts TYPE i.
+
+START-OF-SELECTION.
+  " 使用常量 lc_hello
+  WRITE: / lc_hello.
+
+  " 初始化尝试次数
+  lv_attempts = 0.
+
+  " 模拟尝试操作
+  WHILE lv_attempts < lc_max_attempts.
+    lv_attempts = lv_attempts + 1.
+    WRITE: / 'Attempt', lv_attempts.
+  ENDWHILE.
+```
+
+### 解释
+
+1. **常量定义**
+   - `lc_max_attempts`：一个整型常量，表示最大尝试次数，值为 10。
+   - `lc_hello`：一个字符串常量，值为 "Hello, World!"。
+
+2. **变量定义**
+   - `lv_attempts`：一个整型变量，用于记录尝试次数。
+
+3. **程序主体**
+   - 在 `START-OF-SELECTION` 事件中，首先输出 `lc_hello` 常量的值。
+   - 初始化 `lv_attempts` 变量为 0。
+   - 使用 `WHILE` 循环模拟尝试操作，每次循环中增加尝试次数，并输出当前的尝试次数，直到达到最大尝试次数 `lc_max_attempts`。

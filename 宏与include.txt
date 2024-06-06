@@ -1,0 +1,28 @@
+*&---------------------------------------------------------------------*
+*& Report ZHAO_6_5_TEST
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT zhao_6_5_test.
+*选择p1,p2,p3点击执行对应打印this is mac &1'.
+DEFINE mac_1."定义一个宏
+  WRITE: / 'this is mac &1'.
+end-OF-DEFINITION.
+
+
+PARAMETERS p1 TYPE c AS CHECKBOX."定义三个选择盒p1
+PARAMETERS p2 TYPE c AS CHECKBOX.
+PARAMETERS p3 TYPE c AS CHECKBOX.
+
+START-OF-SELECTION.
+  IF p1 = 'X'."如果p1被选择
+    mac_1 1."对mac_1进行赋值1.
+  ENDIF.
+
+  IF p2 = 'X'."如果p2被选择
+    mac_1 2.
+  ENDIF.
+
+  IF p3 = 'X'."如果p3被选择
+    mac_1 3.
+  ENDIF.

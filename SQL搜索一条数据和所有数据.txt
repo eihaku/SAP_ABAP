@@ -1,0 +1,32 @@
+*&---------------------------------------------------------------------*
+*& Report ZHAO_6_6_TEST02
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT zhao_6_6_test02.
+
+DATA: gs_sflight TYPE sflight.
+
+*SELECT SINGLE * INTO gs_sflight FROM sflight WHERE carrid = 'AA' AND connid = '0017' AND fldate = '20190610'."select single 确保查询结果最多只返回一条数据即使有多个数据满足条件时，
+*"会找到第一条符合条件的记录后立即停止进一步的搜索
+**从 `sflight` 表中查找一条记录，该记录满足以下条件：
+**航空公司代码 (`carrid`) 为 `'AA'`。
+**航班号 (`connid`) 为 `'0017'`。
+**飞行日期 (`fldate`) 为 `'20190610'`。
+*
+**找到的记录将被存储在 `gs_sflight` 结构中。如果没有找到符合条件的记录，`gs_sflight` 将保持其原有状态或初始化状态。
+*
+*WRITE gs_sflight-planetype.
+
+*DATA idx TYPE i.
+*SELECT * INTO gs_sflight FROM sflight WHERE carrid = 'AA' AND connid = '0017'.
+*  idx = idx + 1.
+*  WRITE: / idx, gs_sflight-planetype.
+*ENDSELECT.
+
+DATA: lt_sflight LIKE TABLE OF sflight WITH HEADER LINE.
+SELECT * INTO gs_sflight FROM sflight WHERE carrid = 'AA' AND connid = '0017'.
+
+  LOOP AT lt_sflight.
+    WRITE: / sy-tabix, lt_sflight-planetype.
+  ENDLOOP.

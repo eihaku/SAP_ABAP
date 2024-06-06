@@ -1,0 +1,43 @@
+*&---------------------------------------------------------------------*
+*& Report ZHAO_5_31_TEST
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZHAO_5_31_TEST.
+
+*数据类型有数组元素，结构，表类型三种使用types定义
+*快捷键  /nse11 创建数据类型
+
+*数据字典中的数据类型
+*数据字典预设类型       ABAP类型                运行长度             说明
+*ACCP                  N（6）                   6                   会计结算周期
+*CHAR                  C（n）                   1-255               字符
+*CLNT                  C（3）                   3                   集团，数据区域代码
+*CUKY                  C（5）                   5                   货币代码
+*CURR（n，m）          P（（n+1）/2）DECIMAL m  1-17                货币金额
+*DATS                  D（8）                   8                   日期
+*DEC n，m              P（（n+1）/2）DECIMAL m   n（1-31）m（1-17）  数值计算
+*FLTP                  F（8）                   18                  浮点数
+*INT1                  X（1）（类型b）           3                   单字节整数型
+*INT2                  X（2）（类型s）           5                  双字节整数型
+*INT4                  X（4)（类型i）            10                 四字节整数型
+*LANG                  C（1）                   内部1位外部2位       语言代码
+
+
+TYPES: BEGIN OF st_ty,"types定义数据类型
+  f3(10),
+  f2(15),
+  END OF st_ty.
+
+DATA obj1 TYPE st_ty.
+
+obj1-f3 = 'CCC'.
+obj1-f3 = 'VVVV'.
+
+DATA gt_pernr type ZtPEOPLE."定义一个表类型gt——pernr 表类型是ZtPEOPLE 在/nsell 里面创建的表类型数据
+DATA gt_per2 LIKE TABLE OF zspeople WITH HEADER LINE.
+gt_per2-firstname = 'ZHAO'.
+gt_per2-lastname = 'yingbo'.
+append gt_per2."使用append把这个结构追加到相同的表中
+
+check 1 = 2.

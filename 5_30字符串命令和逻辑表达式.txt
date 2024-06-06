@@ -1,0 +1,146 @@
+*&---------------------------------------------------------------------*
+*& Report ZHAO_5_30_TEST
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZHAO_5_30_TEST.
+
+*data num1 TYPE n LENGTH 3.
+*num1 = 11.
+*WRITE num1."011
+*
+*data dt TYPE d.
+*dt = sy-datum.
+*WRITE: / dt."`今天的日期因为d是日期类型的变量
+**c用于定义文字，shuzi，特殊文字
+**N用于显示c类数字，以字符串形式显示整数
+**D日期类型
+**T 时间类型
+*
+*DATA: var1 TYPE string,
+*      var2 TYPE string.
+*
+*var1 = '你好'.
+*move var1 to var2."var2 = var1
+*WRITE: / var1.
+*WRITE: / var2.
+*
+*DATA: BEGIN OF st1,"结构体定义
+*  f1(10),
+*  f2(15),
+*  END OF st1.
+*
+*  DATA: BEGIN OF st2,"结构体定义
+*    f3(10),
+*    f2(15),
+*    END OF st2.
+*
+*    st1-f1 = 'ABAP'.
+*    st1-f2 = 'ABCDFF'.
+*
+*    move-CORRESPONDING st1 to st2.
+*    WRITE: / 'f3:',st2-f3.
+*    WRITE: / 'f2:',st2-f2.
+
+*move-CORRESPONDING 只取字段名字相同的变量
+
+
+
+*逻辑表达式的运算符-字符串运算符
+*比较字符串(类型C,类型N)
+*CO 仅包含
+*CN 不仅包含
+*CA 包含任何
+*NA 不包含任何
+*CS 包含字符串
+*NS 不包含字符串
+*CP 包含模式
+*NP 不包含模式
+
+
+    if 'BD  'CO 'ABCD '.
+      WRITE : / 'T','pos:',sy-fdpos.
+      else.
+      WRITE : / 'F','pos:',sy-fdpos.
+      endif.
+    if 'BD  'CO 'ABC DE'.
+      WRITE : / 'T','pos:',sy-fdpos.
+      else.
+      WRITE : / 'F','pos:',sy-fdpos.
+      endif.
+      "结果是T 4 返回f1的变量长度
+*如果<f1>仅包含<f2>中的字符，则逻辑表达式f1 CO f2为真，该比 区分大小写，并包括尾部空格
+*如果结果为真则sy-fdpos包括f1的长度，如果为假，则sy-fdpos包含f1中第一个未在f2内出现的字的字符偏移量
+
+
+    if 'ABC12 'CN 'ABCD  '.
+      WRITE : / 'T','pos:',sy-fdpos.
+      else.
+       WRITE : / 'F','pos:',sy-fdpos.
+      endif.
+      "结果是T 3 返回是真第一个未同时在f2中出现的字符的偏移量是3
+*如果<f1>还包含<f2>之外的其他字符，则逻辑表达式f1 CN f2为真，该比 区分大小写，并包括尾部空格
+*如果结果为真则系统字段sy-fdpos包含f1中第一个未同时在f2中出现的字符的偏移量，如果为假则sy-fdpos包括f1的长度
+
+
+*string相关命令
+*find     ABAP字母li存在字母b时，sy-subrc返回值为0
+*REPLACE  将ABAP变换为BBAP
+*TRANSLATE大小写字母转换
+*SHIFT    ABAP依次向左移动
+*CONDENSE 去掉空格并向左对齐，经常与NO-GAPS一起使用去掉空格
+*OVERLAY  填充Character的空格，但不覆盖原来的字符
+*CONCAtenATE  AB+AP连接成ABAP
+*SPLIT    以字符C为中心分为AB与AP
+
+
+
+data: str1(20) VALUE 'Hello abcdefg ',
+      str2 like str1 VALUE 'cdef',
+      str3 TYPE string.
+
+      str3 = str1.
+
+
+*      find str2 in str1.
+*      if sy-subrc = 0.
+*        WRITE: / '找到了'.
+*        else.
+*          WRITE : / '没找到'.
+*          ENDIF.
+*
+*REPLACE str2 in str1 WITH 'GGGG'.
+*          WRITE : / str1.
+*          "结果是hello abGGGGg 将GGGG替换str1中的cdef
+
+
+TRANSLATE str1 to LOWER CASE.
+
+WRITE: / 'str1的值为:', str1.
+
+condense str1 NO-GAPS.
+write: / str1.
+
+*condense  +  NO-GAPS去掉空格
+
+
+str3 = 'ABCD'.
+str1 = str3.
+shift str1.
+WRITE: / 'shilft1 str1的值为；',str1.
+*结果为BCD，shift是去掉字符串的前n个位置的字符，如果n没有指定默认为1，如果指定的n小于等于0，则字符串不变，如果n超出字符串的长度，则字符串变空
+
+SHIFT str1 by 2 PLACES.
+WRITE: / 'shilft2 str1的值为；',str1.
+*结果为CD ,shift主要用于去掉左边的空格
+
+str3 = '      ABCD      '.
+str1 = str3.
+SHIFT str1 LEFT DELETING LEADING space.
+WRITE: / 'shilft3 str1的值为；',str1.
+*去掉左边的space
+
+str1 = str3.
+SHIFT str1 RIGHT DELETING TRAILING space.
+WRITE: / 'shilft4 str1的值为；',str1.
+*去掉右边的空格

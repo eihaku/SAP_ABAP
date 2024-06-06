@@ -1,0 +1,10 @@
+DATA: gv_connid LIKE sflight-connid."se16n查找数据库
+
+EXEC SQL.
+  select a.CONNID INTO :gv_CONNID from sflight a where a.mandt = :SY-MANDT AND A.CARRID = :'AA'
+*查询航线好=a的航班号,不需要句号
+
+
+ENDEXEC.
+
+WRITE gv_connid.

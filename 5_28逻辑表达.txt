@@ -1,0 +1,71 @@
+*&---------------------------------------------------------------------*
+*& Report ZHAO_5_27_TEST
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZHAO_5_27_TEST.
+
+DATA: lt_numbers TYPE TABLE OF i,
+      lv_number  TYPE i,
+      lv_sum     TYPE i VALUE 0.
+
+APPEND 1 TO lt_numbers.
+APPEND 2 TO lt_numbers.
+APPEND 3 TO lt_numbers.
+
+LOOP AT lt_numbers INTO lv_number.
+  IF lv_number MOD 2 = 0.
+    WRITE: / 'Even number:', lv_number.
+  ELSE.
+    WRITE: / 'Odd number:', lv_number.
+  ENDIF.
+
+  CASE lv_number.
+    WHEN 1.
+      WRITE: / 'Number is 1'.
+    WHEN 2.
+      WRITE: / 'Number is 2'.
+    WHEN 3.
+      WRITE: / 'Number is 3'.
+    WHEN OTHERS.
+      WRITE: / 'Unexpected number'.
+  ENDCASE.
+
+  lv_sum = lv_sum + lv_number.
+ENDLOOP.
+
+WRITE: / 'Sum of numbers:', lv_sum.
+
+*明一个类型为整数（`i`）的内表（`TABLE OF i`），用于存储整数值。
+*- **lv_number**：声明一个整数类型的变量，用于在循环中临时存储从内表中读取的值。
+*- **lv_sum**：声明一个整数类型的变量 `lv_sum`，初始值为 `0`，用于计算内表中所有数字的总和。
+*- **APPEND 1 TO lt_numbers.**：将整数值 `1` 添加到内表 `lt_numbers` 中。
+*- **APPEND 2 TO lt_numbers.**：将整数值 `2` 添加到内表 `lt_numbers` 中。
+*- **APPEND 3 TO lt_numbers.**：将整数值 `3` 添加到内表 `lt_numbers` 中。
+*- **LOOP AT lt_numbers INTO lv_number.**：开始一个循环，从内表 `lt_numbers` 中逐行读取数据，每次将当前行的数据存储到变量 `lv_number` 中。
+*- **IF lv_number MOD 2 = 0.**：判断当前数字 `lv_number` 是否为偶数（使用 `MOD` 运算符求余）。
+*  - 如果 `lv_number` 是偶数，输出 `'Even number:'` 和当前的数字。
+*  - 否则，输出 `'Odd number:'` 和当前的数字.
+*- **CASE lv_number.**：根据 `lv_number` 的值进行多重分支选择。
+*  - 如果 `lv_number` 是 `1`，输出 `'Number is 1'`。
+*  - 如果 `lv_number` 是 `2`，输出 `'Number is 2'`。
+*  - 如果 `lv_number` 是 `3`，输出 `'Number is 3'`。
+*  - 如果 `lv_number` 是其他值，输出 `'Unexpected number'`
+*- **lv_sum = lv_sum + lv_number.**：将当前数字 `lv_number` 加到总和变量 `lv_sum` 中。
+
+*- 输出 `'Sum of numbers:'` 和变量 `lv_sum` 的值，表示所有数字的总和
+
+
+*解释：
+
+*1. **第一个元素（1）**：
+*   - 是奇数，所以输出 `Odd number: 1`。
+*   - 输出 `Number is 1`。
+*2. **第二个元素（2）**：
+*   - 是偶数，所以输出 `Even number: 2`。
+*   - 输出 `Number is 2`。
+*3. **第三个元素（3）**：
+*   - 是奇数，所以输出 `Odd number: 3`。
+*   - 输出 `Number is 3`。
+
+*最后，将 `1`, `2`, `3` 相加，总和为 `6`，输出 `Sum of numbers: 6`。

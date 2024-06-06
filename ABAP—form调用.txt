@@ -1,0 +1,144 @@
+在ABAP中，`FORM` 语句用于定义一个子程序（subroutine），可以封装一段逻辑代码，并在程序的其他部分通过调用该子程序来重复使用这段逻辑。子程序在复杂的程序中有助于提高代码的结构化和可读性。
+
+### 定义子程序
+
+子程序使用 `FORM` 和 `ENDFORM` 关键字来定义。以下是定义子程序的基本语法：
+
+```abap
+FORM subroutine_name.
+  " 子程序体
+ENDFORM.
+```
+
+### 调用子程序
+
+在程序的其他部分，可以使用 `PERFORM` 语句来调用子程序：
+
+```abap
+PERFORM subroutine_name.
+```
+
+### 示例
+
+以下是一个定义和调用子程序的示例：
+
+#### 定义和调用不带参数的子程序
+
+```abap
+REPORT zexample_form.
+
+START-OF-SELECTION.
+  " 调用子程序
+  PERFORM display_message.
+
+FORM display_message.
+  WRITE: / 'Hello, this is a message from the subroutine!'.
+ENDFORM.
+```
+
+### 带参数的子程序
+
+子程序还可以接受输入参数和返回输出参数。使用 `USING` 和 `CHANGING` 关键字来定义输入和输出参数。
+
+#### 带参数的子程序语法
+
+```abap
+FORM subroutine_name USING p1 TYPE data_type1 p2 TYPE data_type2
+                     CHANGING p3 TYPE data_type3.
+  " 子程序体
+ENDFORM.
+```
+
+### 示例
+
+以下是一个带参数的子程序示例：
+
+```abap
+REPORT zexample_form_with_params.
+
+DATA: lv_input  TYPE i VALUE 5,
+      lv_result TYPE i.
+
+START-OF-SELECTION.
+  " 调用子程序并传递参数
+  PERFORM calculate_square USING lv_input CHANGING lv_result.
+  WRITE: / 'The square of', lv_input, 'is', lv_result.
+
+FORM calculate_square USING p_input TYPE i
+                      CHANGING p_output TYPE i.
+  p_output = p_input * p_input.
+ENDFORM.
+```
+
+### 解释
+
+1. **定义和初始化数据**：
+   - `lv_input`：一个整型变量，初始化值为 5。
+   - `lv_result`：一个整型变量，用于存储计算结果。
+
+2. **调用子程序**：
+   - 使用 `PERFORM calculate_square USING lv_input CHANGING lv_result` 调用子程序，并传递输入和输出参数。
+
+3. **子程序体**：
+   - 子程序 `calculate_square` 接受一个输入参数 `p_input` 和一个输出参数 `p_output`。
+   - 在子程序内部，计算 `p_input` 的平方，并将结果赋值给 `p_output`。
+
+4. **输出结果**：
+   - 子程序执行完毕后，返回 `lv_result` 的值，并输出结果。
+
+### 传递表作为参数
+
+子程序还可以接受内表作为参数。这可以通过 `USING` 和 `CHANGING` 关键字，并结合 `TABLES` 关键字来实现。
+
+#### 示例：传递内表作为参数
+
+```abap
+REPORT zexample_form_with_table.
+
+TYPES: BEGIN OF ty_person,
+         name TYPE string,
+         age  TYPE i,
+       END OF ty_person.
+
+DATA: lt_people TYPE TABLE OF ty_person,
+      ls_person TYPE ty_person.
+
+" 初始化内表
+ls_person-name = 'Alice'.
+ls_person-age  = 30.
+APPEND ls_person TO lt_people.
+
+ls_person-name = 'Bob'.
+ls_person-age  = 25.
+APPEND ls_person TO lt_people.
+
+START-OF-SELECTION.
+  " 调用子程序并传递内表
+  PERFORM display_people USING lt_people.
+
+FORM display_people TABLES pt_people TYPE ty_person.
+  DATA: ls_person TYPE ty_person.
+
+  LOOP AT pt_people INTO ls_person.
+    WRITE: / 'Name:', ls_person-name, 'Age:', ls_person-age.
+  ENDLOOP.
+ENDFORM.
+```
+
+### 解释
+
+1. **定义数据类型和数据**：
+   - `ty_person`：一个包含 `name` 和 `age` 字段的结构。
+   - `lt_people`：一个内表，用于存储多个 `ty_person` 结构。
+   - `ls_person`：一个 `ty_person` 结构，用于操作单个记录。
+
+2. **初始化内表**：
+   - 将两个人的信息（Alice 和 Bob）添加到 `lt_people` 内表中。
+
+3. **调用子程序**：
+   - 使用 `PERFORM display_people USING lt_people` 调用子程序，并传递内表 `lt_people`。
+
+4. **子程序体**：
+   - 子程序 `display_people` 接受一个内表参数 `pt_people`。
+   - 在子程序内部，使用 `LOOP AT` 循环遍历内表，并输出每个人的信息。
+；‘’‘’、vvvvvvvvvvvvvvvvvvvvvvvn'ZZ

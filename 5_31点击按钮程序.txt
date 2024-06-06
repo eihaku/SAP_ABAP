@@ -1,0 +1,33 @@
+*&---------------------------------------------------------------------*
+*& Report ZHAO_5_31_TEST_2
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZHAO_5_31_TEST_2.
+TABLES: sscrfields.“声明了一个标准表 `sscrfields`，用于处理选择屏幕的字段。`sscrfields` 是一个包含选择屏幕上所有字段的结构，它包含了当前用户操作（例如按钮点击）的相关信息。
+
+
+DATA gm_ucomm LIKE sy-ucomm. ”定义一个变量 `gm_ucomm`，它的类型与系统字段 `sy-ucomm` 相同。`sy-ucomm` 存储了用户在选择屏幕上的最后一个动作（例如，按钮点击）的命令名称。
+
+SELECTION-SCREEN: PUSHBUTTON 2(10) btn1 USER-COMMAND bt1,  “在选择屏幕上定义了两个按钮：
+PUSHBUTTON 12(10) btn2 USER-COMMAND bt2. ”在第2列，宽度为10个字符的位置定义了按钮 `btn1`，当用户点击该按钮时，会触发用户命令 `bt1`。
+
+AT SELECTION-SCREEN. "是一个事件块，当用户与选择屏幕交互时（如点击按钮、输入值等），该块中的代码会被执行。
+  gm_ucomm = sscrfields-ucomm. "将选择屏幕字段结构 `sscrfields` 中的用户命令（`ucomm`）赋值给变量 `gm_ucomm`。
+*  if gm_ucomm = 'BT1'. "检查 `gm_ucomm` 是否等于 `BT1`（即用户点击了 `btn1` 按钮）。
+*    MESSAGE '点击了BT1' TYPE 'S'.
+*    elseif gm_ucomm = 'BT2'.
+*      MESSAGE '点击了 BT2'TYPE 'S'.
+*      endif.
+
+CASE sscrfields-ucomm.
+  when 'BT1'.
+        MESSAGE '点击了BT1' TYPE 'S'.
+        when 'BT2'.
+      MESSAGE '点击了 BT2'TYPE 'S'.
+      ENDcase.
+
+
+INITIALIZATION."是一个事件块，在选择屏幕被显示之前执行。
+btn1 = '按钮1'."设置 `btn1` 按钮的文本为 '按钮1'。
+btn2 = '按钮2'.
