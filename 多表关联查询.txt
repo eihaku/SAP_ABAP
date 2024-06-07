@@ -1,0 +1,40 @@
+*&---------------------------------------------------------------------*
+*& Report ZHAO_6_7_TEST02
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT zhao_6_7_test02.
+
+DATA: lt_sflight LIKE TABLE OF sflight WITH HEADER LINE.
+
+DATA: BEGIN OF lt_tab OCCURS 0.
+        INCLUDE STRUCTURE scarr.
+DATA: connid   LIKE spfli-connid,
+        cityfrom LIKE spfli-cityfrom,
+        cityto   LIKE spfli-cityto,
+      END OF lt_tab.
+
+*SELECT sp~carrid sp~connid sp~cityfrom sp~cityto sc~carrname sc~currcode INTO CORRESPONDING FIELDS OF TABLE lt_tab
+*  FROM scarr AS sc
+*  INNER JOIN spfli AS sp
+*  ON sp~carrid = sc~carrid
+*  WHERE sp~carrid = 'BA'.“内连接可以用主表也可以用结合表，必须两个表都有这个值才能查出来
+*
+*LOOP AT lt_tab.
+*  WRITE: / sy-tabix, lt_tab-carrname.
+*ENDLOOP.
+
+
+
+* 从数据库表 `SCARR` 和 `SPFLI` 中根据航空公司ID为“BA”的条件进行左连接查询。
+* 将查询结果存储在内表 `lt_tab` 中。
+* 遍历内表并输出每行的索引和航空公司名称。
+SELECT sp~carrid sp~connid sp~cityfrom sp~cityto sc~carrname sc~currcode INTO CORRESPONDING FIELDS OF TABLE lt_tab
+  FROM scarr AS sc
+  LEFT JOIN spfli AS sp
+  ON sp~carrid = sc~carrid
+  WHERE sc~carrid = 'BA'."where有主选的表,结合表没有这个条件主表也可以查询出来
+
+LOOP AT lt_tab.
+  WRITE: / sy-tabix, lt_tab-carrname.
+ENDLOOP.

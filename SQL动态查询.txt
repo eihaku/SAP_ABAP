@@ -1,0 +1,23 @@
+DATA : gs_sflight TYPE sflight.
+
+*DATA: BEGIN OF ls_data,
+*        price LIKE sflight-price,
+*        jixin LIKE sflight-planetype,
+*      END OF ls_data.
+*
+*DATA idx TYPE i.
+*
+*SELECT price planetype AS jixin INTO CORRESPONDING FIELDS OF ls_data FROM sflight WHERE carrid = 'AA' AND connid = '0017'.
+*  idx = idx + 1.
+*  WRITE: / idx, ls_data-jixin.
+*ENDSELECT.
+
+data: lt_sflight like table of sflight with header line.
+data fds(72).
+fds = 'price planetype'."设置动态选择字段，表是我们要从数据库中选择的字段是price和planetype，动态语句char类型最大72位，ruguochaoguo72位可以使用table。
+
+SELECT (fds)  INTO CORRESPONDING FIELDS OF table lt_sflight FROM sflight WHERE carrid = 'AA' AND connid = '0017'."动态select语句
+
+LOOP at lt_sflight.
+  WRITE: / sy-tabix,  lt_sflight-planetype.
+  ENDLOOP.

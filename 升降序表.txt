@@ -1,0 +1,15 @@
+data: gt_sflight like TABLE OF sflight WITH HEADER LINE.
+
+
+*升序
+SELECT * from sflight into table gt_sflight order by primary key.
+
+*  loop at gt_sflight.
+*    write: / gt_sflight-connid.
+*    ENDLOOP.
+
+*降序
+    SELECT * from sflight into table gt_sflight order by fldate ascending price descending.
+  loop at gt_sflight.
+    write: / gt_sflight-fldate, gt_sflight-price.
+    ENDLOOP.
