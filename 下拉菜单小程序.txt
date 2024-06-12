@@ -1,0 +1,90 @@
+*&---------------------------------------------------------------------*
+*& Report ZHAO_5_31_TEST_2
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT zhao_5_31_test_2.
+TABLES: sscrfields.
+
+DATA gm_ucomm LIKE sy-ucomm.
+DATA flag TYPE i.
+DATA : gs_sflight TYPE sflight.
+DATA: lt_sflight LIKE TABLE OF sflight WITH HEADER LINE.
+DATA fds(72).
+DATA fds2(72).
+fds = 'price planetype'."设置动态选择字段，表是我们要从数据库中选择的字段是price和planetype，动态语句char类型最大72位，ruguochaoguo72位可以使用table。
+
+
+*SELECT *  into table lt_sflight FROM sflight WHERE carrid = 'AA' AND connid = '0017'.
+
+*  LOOP AT lt_sflight.
+*    WRITE: / sy-tabix, lt_sflight-planetype.
+*  ENDLOOP.
+
+SELECTION-SCREEN:
+*PUSHBUTTON 1(10) btn1 USER-COMMAND bt1,
+*PUSHBUTTON /2(10) btn2 USER-COMMAND bt2,
+COMMENT 1(10) text001.
+*PUSHBUTTON /4(10) btn3 USER-COMMAND bt3.
+
+
+PARAMETERS: p_option TYPE c LENGTH 20 DEFAULT 'AA'
+           AS LISTBOX VISIBLE LENGTH 20
+           OBLIGATORY.
+
+DATA: gv_message TYPE string.
+AT SELECTION-SCREEN ON p_option.
+  if p_option = 'AA'.
+    flag = 1.
+    ENDIF.
+  CASE flag.
+*    WHEN connid = 0017.
+*      fds2 = '0017'.
+*      SELECT SINGLE *  INTO gs_sflight FROM sflight  WHERE connid = fds2().
+*      text001 = gs_sflight-planetype.
+
+    WHEN 1.
+      fds = 'AA'.
+      SELECT SINGLE *  INTO gs_sflight FROM sflight  WHERE carrid = fds().
+      text001 = gs_sflight-planetype.
+    WHEN 'Option 3'.
+      gv_message = 'You selected Option 3'.
+    WHEN OTHERS.
+      gv_message = 'Invalid selection'.
+  ENDCASE.
+  CHECK 1 = 2.
+
+*COMMENT /2(1) text-001,
+*PUSHBUTTON 2(10) btn3 USER-COMMAND bt3,
+*PUSHBUTTON 22(10) btn4 USER-COMMAND bt4.
+
+*AT SELECTION-SCREEN.
+*  gm_ucomm = sscrfields-ucomm.
+*  if gm_ucomm = 'BT1'.
+*    MESSAGE '点击了BT1' TYPE 'S'.
+*    elseif gm_ucomm = 'BT2'.
+*      MESSAGE '点击了 BT2'TYPE 'S'.
+*      endif.
+
+*  CASE sscrfields-ucomm.
+*    WHEN 'BT1'.
+*      fds = 'AA'.
+*      SELECT single *  into gs_sflight FROM sflight  WHERE carrid = fds().
+*      text001 = gs_sflight-planetype.
+*
+**      text001 = '点击了BT1'.
+*    WHEN 'BT2'.
+*      MESSAGE '点击了 BT2'TYPE 'S'.
+*      text001 = '点击了 BT2'.
+*    WHEN 'BT3'.
+*      MESSAGE '点击了BT3' TYPE 'S'.
+*
+*      text001 = '点击了BT3'.
+*  ENDCASE.
+
+
+INITIALIZATION.
+*  btn1 = 'carrid = AA'.
+*  btn2 = '按钮2'.
+*  btn3 = '按钮3'.
+  text001 = ''.
