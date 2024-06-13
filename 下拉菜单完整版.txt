@@ -1,0 +1,86 @@
+*&---------------------------------------------------------------------*
+*& Report ZHAO_6_13_TEST
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT zhao_6_13_test.
+*&---------------------------------------------------------------------*
+TABLES: sscrfields.
+
+DATA gm_ucomm LIKE sy-ucomm.
+DATA flag TYPE i.
+DATA : gs_sflight TYPE sflight.
+DATA: lt_sflight LIKE TABLE OF sflight WITH HEADER LINE.
+DATA fds(72).
+DATA fds2(72).
+fds = 'price planetype'."设置动态选择字段，表是我们要从数据库中选择的字段是price和planetype，动态语句char类型最大72位，ruguochaoguo72位可以使用table。
+
+
+
+SELECTION-SCREEN:
+COMMENT 1(10) text001.
+
+
+DATA: lt_options TYPE vrm_values.
+
+PARAMETERS: p_option TYPE char10 AS LISTBOX VISIBLE LENGTH 10 OBLIGATORY."定义下拉菜单参数 p_option是一个下拉菜单，通过AS LISTBOX关键字指定位下拉菜单类型宽度10，OBLIGATORY表示这个参数是必须的
+
+INITIALIZATION."初始化时间
+  PERFORM fill_dropdown.
+
+START-OF-SELECTION."选择之后点击执行的时间
+  PERFORM process_selection.
+
+FORM fill_dropdown."填充下拉菜单的表单
+  DATA: lv_value TYPE vrm_value."var_
+
+  CLEAR lt_options.
+
+  lv_value-key = 'CARRID'.
+  lv_value-text = 'CARRID=AA'.
+  APPEND lv_value TO lt_options.
+
+  lv_value-key = 'CONNID'.
+  lv_value-text = 'CONNID'.
+  APPEND lv_value TO lt_options.
+
+  CALL FUNCTION 'VRM_SET_VALUES' "VRM_SET_VALUES函数模块将选项carrid和connid添加到下拉菜单
+    EXPORTING
+      id     = 'P_OPTION'
+      values = lt_options.
+ENDFORM.
+
+
+*AT SELECTION-SCREEN ON p_option."使用enter选择时间对屏幕进行操作
+*  if p_option ='CARRID'.
+*    text001 = '12344'.
+*ENDIF.
+
+FORM process_selection.
+  DATA: gv_message TYPE string.
+
+  CASE p_option.
+    WHEN 'CARRID'.
+      fds = 'AA'.
+      SELECT SINGLE *  INTO gs_sflight FROM sflight  WHERE carrid = fds().
+      text001 = gs_sflight-planetype.
+*      gv_message = 'You selected CARRID'.
+    WHEN 'CONNID'.
+      fds2 = '0017'.
+      SELECT SINGLE *  INTO gs_sflight FROM sflight  WHERE connid = fds2().
+
+      gv_message = gs_sflight-planetype.
+    WHEN OTHERS.
+      gv_message = 'Invalid selection'.
+  ENDCASE.
+*WRITE: / gv_message.
+  WRITE: / text001.
+
+ENDFORM.
+
+
+INITIALIZATION.
+*  btn1 = 'carrid = AA'.
+*  btn2 = '按钮2'.
+*  btn3 = '按钮3'.
+  text001 = '11111'.
