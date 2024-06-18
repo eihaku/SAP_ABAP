@@ -1,0 +1,325 @@
+### ABAP 基本语法及说明
+
+ABAP（Advanced Business Application Programming）是一种由SAP公司开发的高级编程语言，广泛用于开发SAP应用程序。以下是一些基本的ABAP语法和相关说明：
+
+### 1. 数据类型和声明
+
+#### 数据声明
+```abap
+DATA: var_name TYPE data_type.
+```
+用于声明变量，`var_name` 是变量名，`data_type` 是数据类型。
+
+例如：
+```abap
+DATA: lv_number TYPE i. " 整数类型
+DATA: lv_text TYPE string. " 字符串类型
+DATA: lt_table TYPE TABLE OF string. " 字符串类型的内表
+```
+
+#### 常量声明
+```abap
+CONSTANTS: const_name TYPE data_type VALUE value.
+```
+用于声明常量。
+
+例如：
+```abap
+CONSTANTS: lc_pi TYPE p DECIMALS 2 VALUE '3.14'. " 小数类型的常量
+```
+
+### 2. 控制结构
+
+### 1. IF 语句
+
+IF 语句用于条件判断，根据条件的真值执行不同的代码块。
+
+```abap
+IF condition.
+  " 当条件为真时执行的代码
+ELSEIF another_condition.
+  " 当另一个条件为真时执行的代码
+ELSE.
+  " 当所有条件都为假时执行的代码
+ENDIF.
+```
+
+#### 示例
+```abap
+DATA: lv_age TYPE i VALUE 25.
+
+IF lv_age < 18.
+  WRITE: '未成年'.
+ELSEIF lv_age >= 18 AND lv_age < 65.
+  WRITE: '成年人'.
+ELSE.
+  WRITE: '老年人'.
+ENDIF.
+```
+
+### 2. CASE 语句
+
+CASE 语句用于多重条件判断，根据变量的值执行不同的代码块。
+
+```abap
+CASE var.
+  WHEN value1.
+    " 当 var 等于 value1 时执行的代码
+  WHEN value2.
+    " 当 var 等于 value2 时执行的代码
+  WHEN OTHERS.
+    " 当 var 不等于上述任何一个值时执行的代码
+ENDCASE.
+```
+
+#### 示例
+```abap
+DATA: lv_grade TYPE c VALUE 'B'.
+
+CASE lv_grade.
+  WHEN 'A'.
+    WRITE: '优秀'.
+  WHEN 'B'.
+    WRITE: '良好'.
+  WHEN 'C'.
+    WRITE: '及格'.
+  WHEN OTHERS.
+    WRITE: '不及格'.
+ENDCASE.
+```
+
+### 3. LOOP 语句
+
+LOOP 语句用于遍历内表或执行重复的操作。
+
+```abap
+LOOP AT itab INTO wa.
+  " 对于内表 itab 的每一行，执行的代码
+ENDLOOP.
+```
+
+#### 示例
+```abap
+DATA: lt_numbers TYPE TABLE OF i,
+      lv_number  TYPE i.
+
+APPEND 1 TO lt_numbers.
+APPEND 2 TO lt_numbers.
+APPEND 3 TO lt_numbers.
+
+LOOP AT lt_numbers INTO lv_number.
+  WRITE: / lv_number.
+ENDLOOP.
+```
+
+### 4. WHILE 语句
+
+WHILE 语句用于在条件为真时重复执行代码块。
+
+```abap
+WHILE condition.
+  " 当条件为真时执行的代码
+ENDWHILE.
+```
+
+#### 示例
+```abap
+DATA: lv_count TYPE i VALUE 1.
+
+WHILE lv_count <= 5.
+  WRITE: / lv_count.
+  lv_count = lv_count + 1.
+ENDWHILE.
+```
+
+### 5. DO 语句
+
+DO 语句用于执行固定次数的循环。
+
+```abap
+DO n TIMES.
+  " 重复执行 n 次的代码
+ENDDO.
+```
+
+#### 示例
+```abap
+DATA: lv_index TYPE i.
+
+DO 3 TIMES.
+  lv_index = sy-index.
+  WRITE: / lv_index.
+ENDDO.
+```
+
+### 6. EXIT, CONTINUE 和 CHECK 语句
+
+- **EXIT**：用于立即退出当前循环。
+- **CONTINUE**：用于跳过当前循环的剩余部分，直接进入下一次循环。
+- **CHECK**：用于根据条件决定是否继续执行循环。
+
+#### 示例
+```abap
+DATA: lt_numbers TYPE TABLE OF i,
+      lv_number  TYPE i.
+
+APPEND 1 TO lt_numbers.
+APPEND 2 TO lt_numbers.
+APPEND 3 TO lt_numbers.
+APPEND 4 TO lt_numbers.
+
+LOOP AT lt_numbers INTO lv_number.
+  IF lv_number = 2.
+    CONTINUE. " 跳过本次循环
+  ENDIF.
+
+  WRITE: / lv_number.
+
+  IF lv_number = 3.
+    EXIT. " 退出循环
+  ENDIF.
+ENDLOOP.
+```
+
+### 7. NESTED LOOPS (嵌套循环)
+
+嵌套循环用于在一个循环内部再嵌套一个循环。
+
+```abap
+LOOP AT itab1 INTO wa1.
+  LOOP AT itab2 INTO wa2.
+    " 执行嵌套循环的代码
+  ENDLOOP.
+ENDLOOP.
+```
+
+#### 示例
+```abap
+DATA: lt_outer TYPE TABLE OF i,
+      lt_inner TYPE TABLE OF i,
+      lv_outer TYPE i,
+      lv_inner TYPE i.
+
+APPEND 1 TO lt_outer.
+APPEND 2 TO lt_outer.
+
+APPEND 3 TO lt_inner.
+APPEND 4 TO lt_inner.
+
+LOOP AT lt_outer INTO lv_outer.
+  WRITE: / 'Outer loop:', lv_outer.
+  LOOP AT lt_inner INTO lv_inner.
+    WRITE: / '  Inner loop:', lv_inner.
+  ENDLOOP.
+ENDLOOP.
+```
+```
+用于遍历内表。
+
+#### WHILE 语句
+```abap
+WHILE condition.
+  " statements
+ENDWHILE.
+```
+用于循环执行代码块，直到条件不满足。
+
+### 3. 数据操作
+
+#### 内表操作
+```abap
+DATA: lt_table TYPE TABLE OF data_type,
+      ls_row   TYPE data_type.
+
+APPEND ls_row TO lt_table.
+READ TABLE lt_table INTO ls_row INDEX 1.
+LOOP AT lt_table INTO ls_row.
+  " statements
+ENDLOOP.
+```
+内表（itab）是ABAP中的一种数据结构，用于存储同类型数据的集合。
+
+#### 字段符号
+```abap
+FIELD-SYMBOLS: <fs> TYPE data_type.
+ASSIGN variable TO <fs>.
+```
+字段符号类似于指针，用于引用内存中的数据。
+
+例如：
+```abap
+DATA: lv_value TYPE i VALUE 10.
+FIELD-SYMBOLS: <fs> TYPE i.
+ASSIGN lv_value TO <fs>.
+WRITE: / <fs>.
+```
+
+### 4. 模块化编程
+
+#### 子程序（Form）
+```abap
+FORM form_name USING var1 TYPE data_type1
+                        var2 TYPE data_type2
+     CHANGING var3 TYPE data_type3
+     RETURNING VALUE(return_value) TYPE return_data_type.
+
+  " statements
+
+ENDFORM.
+```
+用于定义子程序。调用子程序：
+```abap
+PERFORM form_name USING var1 var2
+                   CHANGING var3.
+```
+
+#### 方法（Method）
+```abap
+CLASS class_name DEFINITION.
+  PUBLIC SECTION.
+    METHODS: method_name IMPORTING var1 TYPE data_type1
+                                 var2 TYPE data_type2
+                         EXPORTING var3 TYPE data_type3
+                         RETURNING VALUE(return_value) TYPE return_data_type.
+ENDCLASS.
+
+CLASS class_name IMPLEMENTATION.
+  METHOD method_name.
+    " statements
+  ENDMETHOD.
+ENDCLASS.
+```
+用于定义类的方法。调用方法：
+```abap
+DATA: lo_object TYPE REF TO class_name,
+      lv_result TYPE return_data_type.
+
+CREATE OBJECT lo_object.
+lv_result = lo_object->method_name( var1 = value1
+                                    var2 = value2 ).
+```
+
+### 5. 数据库操作
+
+#### SELECT 语句
+```abap
+SELECT field1 field2
+  INTO (lv_field1, lv_field2)
+  FROM table_name
+  WHERE condition.
+ENDSELECT.
+```
+用于从数据库表中选择数据。
+
+例如：
+```abap
+DATA: lv_carrid TYPE scarr-carrid,
+      lv_carrname TYPE scarr-carrname.
+
+SELECT carrid carrname
+  INTO (lv_carrid, lv_carrname)
+  FROM scarr
+  WHERE carrid = 'LH'.
+ENDSELECT.
+```
+

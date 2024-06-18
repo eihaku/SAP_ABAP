@@ -1,0 +1,25 @@
+
+DATA: lt_flights TYPE TABLE OF sflight,
+      ls_flight  TYPE sflight,
+      lv_carrid  TYPE sflight-carrid.
+
+" 设置目标航空公司ID
+lv_carrid = 'AA'. " 示例航空公司ID，请根据实际情况调整
+
+" 查询价格低于该航空公司平均航班价格的航班
+SELECT *
+  INTO TABLE @lt_flights
+  FROM sflight
+  WHERE carrid = @lv_carrid
+    AND price < ( SELECT AVG( price )
+                  FROM sflight
+                  WHERE carrid = @lv_carrid ).
+
+" 检查是否找到符合条件的记录
+IF sy-subrc = 0.
+  LOOP AT lt_flights INTO ls_flight.
+    WRITE: / ls_flight-carrid, ls_flight-connid, ls_flight-fldate, ls_flight-price.
+  ENDLOOP.
+ELSE.
+  WRITE: / 'No flights found with price below average for the given airline'.
+ENDIF.
