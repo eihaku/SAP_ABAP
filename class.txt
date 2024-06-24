@@ -1,0 +1,78 @@
+*&---------------------------------------------------------------------*
+*& Report ZCL_C5U2_EMPLOYEE
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT zcl_c5u2_employee.
+CLASS zcl_c5u2_employee DEFINITION
+  PUBLIC
+  CREATE PUBLIC.
+
+  PUBLIC SECTION.
+    METHODS:
+      constructor IMPORTING firstname TYPE string
+                            lastname  TYPE string,
+      get_printname RETURNING VALUE(fullname) TYPE string,
+      earnings ABSTRACT RETURNING VALUE(earn) TYPE f,
+      print ABSTRACT.
+  PROTECTED SECTION.
+  PRIVATE SECTION.
+    DATA: first_name TYPE string,
+          last_name  TYPE string.
+ENDCLASS.
+
+
+CLASS zcl_c5u2_employee IMPLEMENTATION.
+  METHOD constructor.
+    fir_name = firstname.
+    last_name = lastname.
+  ENDMETHOD.
+
+  METHOD get_printname.
+    CONCATENATE last_name first_name INTO fullname SEPARATED BY space.
+  ENDMETHOD.
+ENDCLASS.
+
+CLASS zcl_c5u2_boss DEFINITION
+  PUBLIC
+  INHERITING FROM zcl_c5u2_employee
+  FINAL CREATE PUBLIC.
+
+  PUBLIC SECTION.
+    METHODS:
+      constuctor IMPORTING fn TYPE string
+                           ln TYPE string
+                           wl TYPE f,
+      set_weekly_salary IMPORTING ws TYPE f,
+      earnings REDEFINITION,
+      print REDEFINITION.
+  PROTECTED SECTION.
+  PRIVATE SECTION.
+    DATA: weekly_salart TYPE f.
+ENDCLASS.
+
+CLASS zcl_c5u2_boss IMPLEMENTATION.
+  METHOD constructor.
+    CALL METHOD super->constructor
+      EXPORTING
+        firstname = fn
+        lastname  = ln.
+    weekly_salary = wl.
+  ENDMETHOD.
+
+  METHOD set_weekly_salary.
+    weekly_salart = ws.
+  ENDMETHOD.
+
+  METHOD earnings.
+    earn = weekly_salary * 4.
+  ENDMETHOD.
+
+  METHOD print.
+    wrtie: /, 'My name is :', get_printname().
+    wrtie: /, 'My salart is :', me->earnings() decimals 2 exponent 0.
+  ENDMETHOD.
+
+
+
+ENDCLASS.
